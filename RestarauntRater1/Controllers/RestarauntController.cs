@@ -15,5 +15,26 @@ namespace RestarauntRater1.Controllers
         {
             return View(db.Restaraunts.ToList());
         }
+
+        // GET: Restaraunt/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST : Restaraunt/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Restaraunt restaraunt)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Restaraunts.Add(restaraunt);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View(restaraunt);
+        }
     }
 }
