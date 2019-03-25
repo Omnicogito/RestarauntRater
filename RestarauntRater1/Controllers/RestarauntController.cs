@@ -1,6 +1,7 @@
 ﻿using RestarauntRater1.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -38,6 +39,53 @@ namespace RestarauntRater1.Controllers
             return View(restaraunt);
         }
 
+        //GET: Restaraunt/Details/id
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Restaraunt restaraunt = db.Restaraunts.Find(id);
+            if (restaraunt == null)
+            {
+                return HttpNotFound();
+            }
+            return View(restaraunt);
+        }
+
+        //Get: Restaurant/Edit/id
+        public ActionResult Edit(int? id)
+        {
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Restaraunt restaraunt = db.Restaraunts.Find(id);
+            if(restaraunt == null)
+            {
+                return HttpNotFound();
+            }
+            return View(restaraunt);
+        }
+
+
+        //Post: Restaraunt/Edit/id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Restaraunt restaraunt)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(restaraunt).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(restaraunt);
+        }
+
+
+
         //GET: Restaraunt/Delete/id
         public ActionResult Delete(int? id)
         {
@@ -65,5 +113,10 @@ namespace RestarauntRater1.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
+
+
+
     }
 }
