@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -22,7 +23,7 @@ namespace RestarauntRater1.Controllers
             return View();
         }
 
-        // POST : Restaraunt/Create
+        // POST: Restaraunt/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Restaraunt restaraunt)
@@ -35,6 +36,34 @@ namespace RestarauntRater1.Controllers
             }
 
             return View(restaraunt);
+        }
+
+        //GET: Restaraunt/Delete/id
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Restaraunt restaraunt = db.Restaraunts.Find(id);
+            if(restaraunt == null)
+            {
+                return HttpNotFound();
+            }
+            return View(restaraunt);
+        }
+
+
+        //POST: Restaraunt/Delete/id
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Restaraunt restaraunt = db.Restaraunts.Find(id);
+            db.Restaraunts.Remove(restaraunt);
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
